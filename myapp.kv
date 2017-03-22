@@ -1,0 +1,230 @@
+#: import CheckBox kivy.uix.checkbox
+<CustLabel@Label>:
+    color: 0, 0, 0, 1
+<CustCkb@CheckBox>:
+    color: 0, 0, 0, 1
+
+<CustSwitch@Switch>:
+    values: ['OFF', 'ON']
+    canvas:
+        Color:
+            rgb: 0.2, 0.709, 0.898, 1
+        Rectangle:
+            size: [sp(40), sp(25)]
+            pos: [self.center_x - sp(40), self.center_y - sp(12)]
+        Color:
+            rgb: 0.2, 0.709, 0.898, 1
+        Rectangle:
+            size: [sp(43), sp(25)]
+            pos: [self.center_x, self.center_y - sp(12)]
+    Label:
+        text: '[b]{}[/b]'.format(root.values[0])
+        markup: True
+        font_size: 13
+        pos: [root.center_x - sp(70), root.center_y - sp(50)]
+    Label:
+        text: '[b]{}[/b]'.format(root.values[1])
+        markup: True
+        font_size: 13
+        pos: [root.center_x - sp(30), root.center_y - sp(50)]
+
+<MyWidget>
+    id: BL_Main
+    orientation: "horizontal"
+    padding: 10
+    spacing: 10
+########################### LEFT PANE
+    BoxLayout:
+        id: BL_folder  
+        size_hint: None, 1
+        width:320
+        orientation: "vertical"
+
+        BoxLayout:   # color behind FileChooserIconView
+            orientation:"horizontal"
+            canvas.before:
+                Color:
+                    rgb: .4,.5,.5
+                Rectangle: 
+                    pos: self.pos
+                    size: self.size
+                    
+            ## multiple select folder  not possible with FileChooserListView     / other attribute not used : on_selection:  root.selected(filechooser.selection)
+            FileChooserIconView:  
+                id: filechooser
+                pos:self.pos
+                multiselect: True
+                dirselect: True
+                path :  root.Filechooser_initial_path 
+                
+
+######## CRITERES
+        BoxLayout:
+            id: BL_Crit_ListView
+            orientation: "vertical"
+            padding: 10
+            canvas.before:
+                Color:
+                    rgb: .9,.9,.9, 0.2
+                Rectangle: 
+                    pos: self.pos
+                    size: self.size
+            CustLabel:
+
+                text: "[b]Critères[/b]"
+                markup:True
+                
+            BoxLayout:                                                         # Empty folder
+                id: BL_Crit
+                orientation: "horizontal"
+
+                CustLabel:
+                    text: "Empty folder only"
+                CustCkb:
+                    id:Ck_emptyfolder
+                    ## active: root.Oj_Ck_emptyfolder
+                    
+            BoxLayout:                                                          # desktop ini
+                id: BL_Crit
+                orientation: "horizontal"
+
+                CustLabel:
+                    text: "Contains only desktop.ini"
+                CustCkb:
+                    id:Ck_only_desktop_ini
+                    ## active: root.Oj_Ck_only_desktop_ini 
+                    
+            BoxLayout:                                                          # srt txt
+                id: BL_Crit
+                orientation: "horizontal"
+
+                CustLabel:
+                    text: "Contains only .srt/.txt"
+                CustCkb:
+                    id:Ck_only_srt_txt
+                    ## active : root.Oj_Ck_only_srt_txt  
+            Label:
+                text:""
+                
+            BoxLayout:                                                          # srt txt
+                id: BL_Crit
+                orientation: "vertical"
+
+                size_hint_y: None
+                height: 50
+                canvas.before:
+                    Color:
+                        rgb: 0.808, 0.808, 0.808
+                    Rectangle: 
+                        pos: self.pos
+                        size: self.size
+                CustLabel:
+                    text: "Delete folder containing only (ex: .pdf, .mp3):"
+                    size_hint: 1,None
+                    height:20
+                TextInput:  
+                    size_hint: 1,None
+                    height:30
+                    id: Txt_extension
+                    multiline:False
+            Label:
+                text:""
+                
+            BoxLayout:                                                          # size
+                id: BL_size
+                orientation: "vertical" 
+                size_hint_y: None
+                height: 50
+
+                canvas.before:
+                    Color:
+                        rgb:0.808, 0.808, 0.808
+                    Rectangle: 
+                        pos: self.pos
+                        size: self.size               
+                CustLabel:
+                    text: "Size (Kb= .txt / Mb= .pdf / Gb = DVD)"
+                    size_hint: 1,None
+                    height:20       
+                    
+                BoxLayout:                                              
+                    id: BL_size
+                    orientation: "horizontal" 
+                    
+                    CustSwitch:
+                        id:sup_inf
+                        values: ['<', '>']   
+                        active:True
+                        
+                    TextInput:  
+                        size_hint: 1,None
+                        height:30
+                        id: Txt_size
+                        multiline:False
+                    
+
+                    ToggleButton:
+                        text:'Kb'
+                        id:Kb
+                        group:'size'
+                        state:'down'
+                        size_hint: None, None
+                        height: 30
+                        width: 25
+                        allow_no_selection : False
+                    ToggleButton:
+                        text:'Mb'
+                        id: Mb
+                        group:'size'
+                        size_hint: None, None
+                        height: 30
+                        width: 25
+                        allow_no_selection : False
+                    ToggleButton:
+                        text:'Gb'
+                        id:Gb
+                        group:'size'
+                        size_hint: None, None
+                        height: 30
+                        width: 25
+                        allow_no_selection : False
+                        
+            CustLabel:   ## Lbl used as separator
+                id: Lb_ListViewFolder
+                text: ""
+                size_hint_x: .75
+            Button:
+                id:ok
+                text:'OK'
+                background_color: 0,0,1,1
+                size_hint: None, None
+                height: 30
+                width: 25
+                on_press: root.selected(filechooser.path, filechooser.selection, Ck_emptyfolder.active,Ck_only_desktop_ini.active,Ck_only_srt_txt.active, Txt_extension.text, sup_inf.active, Txt_size.text,  Kb.state, Mb.state, Gb.state)
+
+	## ## Image: 
+		## ## source : 'loading.zip'
+		## ## anim_delay : 0.02
+		## ## allow_stretch : True
+		## ## keep_ratio : True
+		## ## keep_data : True
+<Loading_Image_KV>
+	Image: 
+		source : 'loading.zip'
+		anim_delay : 0.2
+		allow_stretch : True
+		keep_ratio : True
+		keep_data : True
+
+<CustomCheckbox>: ## 
+	canvas.before:
+		Color:
+			rgb: 1,1,0
+		Rectangle:
+			pos:self.center_x-8, self.center_y-8
+			size:[16,16]
+		Color:
+			rgb: 0,0,0
+		Rectangle:
+			pos:self.center_x-7, self.center_y-7
+			size:[14,14]
