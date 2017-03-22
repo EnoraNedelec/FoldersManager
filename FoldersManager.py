@@ -217,9 +217,9 @@ class MyWidget(BoxLayout):
 		for list in lists_to_display: 
 			title=Label(bold= True,font_size=20, text=list[0],size_hint_y=None, height=40)
 			layout_all_list_for_scroll.add_widget(title)
-			yield 0.01
+			yield 0.000001 #anim_gif
 			for folder in list[1:]: 
-				yield 0.01
+				yield 0.000001 #anim_gif
 				layout_folder = GridLayout(cols=5, spacing= 15, size_hint_y=None, height=40 )
 
 				path=Label(font_size=15, text=str(folder[0].replace(self.root_path, '...root...')), size_hint_x= None)
@@ -237,7 +237,7 @@ class MyWidget(BoxLayout):
 				subfolder.bind(size_hint_min_x=subfolder.setter('width'))
 				scroll_sf = ScrollView(size_hint=(None, None), size=((Window.width-400)/5, 30))
 				scroll_sf .add_widget(subfolder)
-				yield 0.01#anim_gif
+	
 				files_text= str(folder[2])
 				if len(files_text)>100:
 					files_text= files_text[0:100]+" (...)"
@@ -246,7 +246,7 @@ class MyWidget(BoxLayout):
 				files.bind(size_hint_min_x=files.setter('width'))
 				scroll_f = ScrollView(size_hint=(None, None), size=((Window.width-400)/5, 30))
 				scroll_f.add_widget(files)
-				yield 0.01#anim_gif
+
 
 				layout_folder.add_widget(scroll_p)                   
 				layout_folder.add_widget(scroll_sf)   
@@ -266,7 +266,7 @@ class MyWidget(BoxLayout):
 					sizes_label = Label(font_size=15, text=size_human) 
 					layout_folder.add_widget(sizes_label)
 				checkb= CustomCheckbox()	
-				yield 0.01#anim_gif
+	
 				self.dico_ref_folder_selected_ck[str(index)] = checkb  # add ref checkbox for later retrieve 
 				layout_folder.add_widget(checkb)
 				layout_all_list_for_scroll.add_widget(layout_folder)
